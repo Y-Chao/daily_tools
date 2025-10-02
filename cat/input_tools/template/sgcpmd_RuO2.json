@@ -1,0 +1,33 @@
+{
+    "motion": {
+        "md": {
+            "ensemble": "langevin",
+            "langevin": {
+                "gamma": 0.001,
+                "noisy_gamma": 0
+            },
+            "thermal_region": {
+                "do_langevin_default": "true",
+                "force_rescaling": "true",
+                "print": {
+                    "temperature": {},
+                    "langevin_regions": {
+                        "filename": "__std_out__"
+                    }
+                },
+                "define_region": [
+                    {
+                        "temperature": 330,
+                        "noisy_gamma_region": 2.2e-4,
+                        "list": ""
+                    },
+                    {
+                        "temperature": 330,
+                        "noisy_gamma_region": 5.0e-5,
+                        "list": ""
+                    }
+                ]
+            }
+        }
+    }
+}

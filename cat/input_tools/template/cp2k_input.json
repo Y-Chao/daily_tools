@@ -1,0 +1,389 @@
+{
+    "default_section": {
+        "global": {
+            "project": "cp2k"
+        },
+        "force_eval": {
+            "method": "Quickstep",
+            "dft": {
+                "basis_set_file_name": "./BASIS_MOLOPT",
+                "potential_file_name": "./GTH_POTENTIALS",
+                "mgrid": {
+                    "cutoff": 600,
+                    "rel_cutoff": 60
+                },
+                "qs": {
+                    "eps_default": 1.0E-13
+                },
+                "scf": {
+                    "scf_guess": "restart",
+                    "eps_scf": 1e-06,
+                    "max_scf": 20,
+                    "outer_scf": {
+                        "max_scf": 20,
+                        "eps_scf": 1.0E-6
+                    }
+                },
+                "xc": {
+                    "xc_functional": {
+                        "-": "pbe"
+                    }
+                },
+                "print": {
+                    "mo_cubes": {
+                        "write_cube": "false"
+                    }
+                }
+            },
+            "subsys": {
+                "topology": {
+                    "coord_file_format": "xyz",
+                    "coord_file_name": "coord.xyz"
+                },
+                "kind": [
+                    {
+                        "-": "element",
+                        "potential": "GTH-PBE",
+                        "basis_set": "DZVP-MOLOPT-SR-GTH"
+                    }
+                ]
+            },
+            "print": {
+                "forces": {
+                    "-": "on"
+                },
+                "stress_tensor": {
+                    "-": "off"
+                }
+            },
+            "stress_tensor": "none"
+        }
+    },
+    "cellopt_section": {
+        "global": {
+            "run_type": "cell_opt"
+        },
+        "force_eval": {
+            "stress_tensor": "analytical"
+        },
+        "motion": {
+            "cell_opt": {
+                "type": "minimization",
+                "optimizer": "bfgs",
+                "keep_angles": "true",
+                "max_iter": 200,
+                "max_force": 4e-5
+            },
+            "print": {
+                "trajectory": {
+                    "each": {
+                        "cell_opt": 1
+                    }
+                },
+                "velocities": {
+                    "each": {
+                        "cell_opt": 1
+                    }
+                },
+                "forces": {
+                    "-": "on"
+                },
+                "restart_history": {},
+                "restart": {
+                    "backup_copies": 3
+                }
+            }
+        }
+    },
+    "geoopt_section": {
+        "global": {
+            "run_type": "geo_opt"
+        },
+        "motion": {
+            "geo_opt": {
+                "type": "minimization",
+                "optimizer": "bfgs",
+                "max_iter": 200,
+                "max_force": 4e-5
+            },
+            "print": {
+                "trajectory": {
+                    "each": {
+                        "geo_opt": 10
+                    }
+                },
+                "velocities": {
+                    "each": {
+                        "geo_opt": 10
+                    }
+                },
+                "forces": {
+                    "-": "on"
+                },
+                "restart_history": {},
+                "restart": {
+                    "backup_copies": 3
+                }
+            }
+        }
+    },
+    "bomd_section": {
+        "global": {
+            "run_type": "md"
+        },
+        "motion": {
+            "md": {
+                "ensemble": "nvt",
+                "timestep": 0.5,
+                "steps": 2000000,
+                "temperature": 330,
+                "thermostat": {
+                    "region": "global",
+                    "type": "nose",
+                    "nose": {
+                        "length": 3,
+                        "yoshida": 3,
+                        "timecon": 400
+                    }
+                }
+            },
+            "print": {
+                "trajectory": {
+                    "each": {
+                        "md": 10
+                    }
+                },
+                "velocities": {
+                    "each": {
+                        "md": 10
+                    }
+                },
+                "forces": {
+                    "-": "on"
+                },
+                "restart_history": {
+                    "each": {
+                        "md": 1000
+                    }
+                },
+                "restart": {
+                    "backup_copies": 3
+                }
+            }
+        }
+    },
+    "sgcpmd_section": {
+        "global": {
+            "run_type": "md"
+        },
+        "force_eval": {
+            "dft": {
+                "qs": {
+                    "eps_default": 1.0E-13,
+                    "extrapolation": "aspc",
+                    "extrapolation_order": 0
+                },
+                "scf": {
+                    "scf_guess": "restart",
+                    "eps_scf": 5e-07,
+                    "max_scf": 20,
+                    "max_scf_history": 5,
+                    "outer_scf": {
+                        "max_scf": 20,
+                        "eps_scf": 1.0E-6
+                    },
+                    "ot": {
+                        "minimizer": "diis",
+                        "precond_solver": "inverse_update",
+                        "preconditioner": "full_single_inverse",
+                        "stepsize": 0.01
+                    },
+                    "print": {
+                        "restart": {
+                            "each": {
+                                "md": 20
+                            }
+                        }
+                    }
+                }
+            },
+            "motion": {
+                "md": {
+                    "ensemble": "langevin",
+                    "langevin": {
+                        "gamma": 0.001,
+                        "noisy_gamma": 0
+                    },
+                    "thermal_region": {
+                        "do_langevin_default": "true",
+                        "force_rescaling": "true",
+                        "print": {
+                            "temperature": {},
+                            "langevin_regions": {
+                                "filename": "__std_out__"
+                            }
+                        },
+                        "define_region": [
+                            {
+                                "temperature": 330,
+                                "noisy_gamma_region": 2.2e-4,
+                                "list": ""
+                            },
+                            {
+                                "temperature": 330,
+                                "noisy_gamma_region": 5.0e-5,
+                                "list": ""
+                            }
+                        ]
+                    },
+                    "print": {
+                        "trajectory": {
+                            "each": {
+                                "md": 10
+                            }
+                        },
+                        "velocities": {
+                            "each": {
+                                "md": 10
+                            }
+                        },
+                        "forces": {
+                            "-": "on"
+                        },
+                        "restart_history": {
+                            "each": {
+                                "md": 1000
+                            }
+                        },
+                        "restart": {
+                            "backup_copies": 3
+                        }
+                    },
+                    "temp_kind": "true"
+                }
+            }
+        }
+    },
+    "restart_section": {
+        "force_eval": {
+            "dft": {
+                "scf": {
+                    "max_scf": 3,
+                    "eps_diis": 1.0E-15,
+                    "diagonalization": {
+                        "_": "false"
+                    },
+                    "mixing": {
+                        "alpha": 0.0,
+                        "method": "direct_p_mixing"
+                    }
+                }
+            }
+        }
+    },
+    "diagonalization_section": {
+        "force_eval": {
+            "dft": {
+                "scf": {
+                    "added_mos": 500,
+                    "cholesky": "inverse",
+                    "smear": {
+                        "-": "on",
+                        "method": "fermi_dirac",
+                        "electronic_temperature": 300
+                    },
+                    "diagonalization": {
+                        "algorithm": "standard"
+                    },
+                    "mixing": {
+                        "method": "broyden_mixing",
+                        "alpha": 0.3,
+                        "beta": 1.5,
+                        "nbuffer": 8
+                    }
+                }
+            }
+        }
+    },
+    "ot_section": {
+        "force_eval": {
+            "dft": {
+                "scf": {
+                    "ot": {
+                        "minimizer": "diis",
+                        "precond_solver": "inverse_update",
+                        "preconditioner": "full_single_inversion",
+                        "stepsize": 0.01
+                    }
+                }
+            }
+        }
+    },
+    "xc_scan_section": {
+        "force_eval": {
+            "dft": {
+                "xc": {
+                    "xc_functional": {
+                        "MGGA_X_RSCAN": {},
+                        "MGGA_C_RSCAN": {}
+                    }
+                }
+            }
+        }
+    },
+    "xc_revpbe_section": {
+        "force_eval": {
+            "dft": {
+                "xc": {
+                    "xc_functional": {
+                        "pbe": {
+                            "parametrization": "revpbe",
+                            "scale_x": 0.75,
+                            "scale_c": 1.0
+                        }
+                    },
+                    "xc_grid": {
+                        "xc_deriv": "spline2_smooth"
+                    }
+                }
+            }
+        }
+    },
+    "vdw_revpbe_d3_section": {
+        "force_eval": {
+            "dft": {
+                "xc": {
+                    "vdw_potential": {
+                        "potential_type": "pair_potential",
+                        "pair_potential": {
+                            "type": "dftd3",
+                            "r_cutoff": 15,
+                            "long_range_correction": "true",
+                            "reference_functional": "revpbe",
+                            "parameter_file_name": "dftd3.dat"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "vdw_pbe_d3_section": {
+        "force_eval": {
+            "dft": {
+                "xc": {
+                    "vdw_potential": {
+                        "dispersion_functional": "pair_potential",
+                        "pair_potential": {
+                            "type": "dftd3",
+                            "parameter_file_name": "./dftd3.dat",
+                            "reference_functional": "pbe",
+                            "calculate_c9_term": true,
+                            "reference_c9_term": true,
+                            "r_cutoff": 12.0
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,8 @@
+# Byte-compiled / optimized / DLL files
+**/dev_workbench/*
+**/.vscode/*
+**/__pycache__/*
+**/examples/*
+
+# develop environment
+dev/

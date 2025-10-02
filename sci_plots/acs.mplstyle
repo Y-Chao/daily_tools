@@ -1,0 +1,44 @@
+# Font
+font.family         : sans-serif
+font.sans-serif     : Arial, Helvetica, DejaVu Sans, Bitstream Vera Sans, sans-serif
+font.size           : 8
+
+# Axes
+axes.labelsize      : 8
+axes.titlesize      : 9
+axes.linewidth      : 0.8
+axes.edgecolor      : black
+axes.spines.top     : true
+axes.spines.right   : true
+axes.grid           : false
+
+# Lines and markers
+lines.linewidth     : 1.2
+lines.markersize    : 4
+
+# Ticks
+xtick.direction     : out
+ytick.direction     : out
+xtick.major.size    : 3
+ytick.major.size    : 3
+xtick.major.width   : 0.8
+ytick.major.width   : 0.8
+xtick.labelsize     : 7
+ytick.labelsize     : 7
+
+# Legend
+legend.fontsize     : 7
+legend.frameon      : false
+
+# Figure
+figure.dpi          : 300
+savefig.dpi         : 600
+figure.figsize      : 3.5, 2.5  # single column JACS figure
+figure.facecolor    : white
+
+# Savefig
+savefig.transparent : False
+savefig.bbox        : tight
+savefig.pad_inches  : 0.05
+
+
