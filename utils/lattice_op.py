@@ -11,7 +11,8 @@ __version__ = "1.0"
 Basic lattice operation utils.
 """
 
-def random_orthogonal_matrix(dim: int=3) -> np.ndarray:
+
+def random_orthogonal_matrix(dim: int = 3) -> np.ndarray:
     """
     Generate a random orthogonal matrix using Gram-Schmidt process.
 
@@ -28,12 +29,8 @@ def random_orthogonal_matrix(dim: int=3) -> np.ndarray:
 
     # Apply Gram-Schmidt process
     Q, R = np.linalg.qr(A)
-
     return Q
 
-def main():
-    
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

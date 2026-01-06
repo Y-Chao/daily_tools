@@ -6,4 +6,7 @@
 
 # develop environment
 dev/
-.deprecated
+.deprecated/
+.qodo/
+.venv/
+.python-version
