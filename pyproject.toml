@@ -8,4 +8,7 @@ dependencies = [
     "ase>=3.27.0",
     "matplotlib>=3.10.8",
     "numpy>=2.4.0",
+    "pandas>=2.3.3",
+    "plotly>=6.5.1",
+    "pymatgen>=2025.10.7",
 ]
