@@ -1,14 +1,23 @@
 [project]
+<<<<<<< Updated upstream
 name = "daily-tools"
 version = "0.1.0"
 description = "Add your description here"
+=======
+name = "catkit"
+version = "0.1.0"
+description = "Common scripts and tools for catalysis research"
+>>>>>>> Stashed changes
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "ase>=3.27.0",
     "matplotlib>=3.10.8",
     "numpy>=2.4.0",
+<<<<<<< Updated upstream
     "pandas>=2.3.3",
     "plotly>=6.5.1",
     "pymatgen>=2025.10.7",
+=======
+>>>>>>> Stashed changes
 ]

@@ -312,7 +312,7 @@
                     "ot": {
                         "minimizer": "diis",
                         "precond_solver": "inverse_update",
-                        "preconditioner": "full_single_inversion",
+                        "preconditioner": "full_single_inverse",
                         "stepsize": 0.01
                     }
                 }

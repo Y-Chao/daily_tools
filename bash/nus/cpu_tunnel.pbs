@@ -3,14 +3,14 @@
 #PBS -l select=1:ncpus=36
 #PBS -l walltime=02:00:00
 #PBS -j oe  
-#PBS -m bea
-#PBS -M c_yang@nus.edu.sg
 #PBS -P CFP03-CF-125
-# `-m bea` send mail when the job (b)egins, (e)nds, or (a)borts
 # `-j oe`: join STDOUT and STDERR in single file
 
 source ~/.bashrc
+module load Miniconda3
+conda activate [env] # replace [env] with your conda environment name
 cd $PBS_O_WORKDIR
-RUNTIME_NAME="vanda_gpu"
+cp ~/opt/code .
+RUNTIME_NAME="vanda_cpu"
 OUTPUT_PATH="${PBS_O_WORKDIR}/${RUNTIME_NAME}_tunnel.out"
 python ~/opt/src/tools/launch_tunnel.py --type $RUNTIME_NAME > $OUTPUT_PATH 2>&1

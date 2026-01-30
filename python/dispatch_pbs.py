@@ -1,35 +1,33 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-#from __future__ import annotations
+# from __future__ import annotations
 
-__author__ = 'Chao Yang'
-__version__=	'1.0'
+__author__ = "Chao Yang"
+__version__ = "1.0"
 
 import os
+import subprocess
 import sys
 import time
-import subprocess
 from itertools import groupby
 
 ASP2A_Q = "asp2a-login-nus01"
+
 
 class PBS:
     """
     The job mananeger for PBS pro
     """
 
-    def __init__(self):
-        ...
+    def __init__(self): ...
 
-    def monitor(self):
-        ...
+    def monitor(self): ...
 
-    def submit(self):
-        ...
+    def submit(self): ...
 
-    def kill(self):
-        ...
+    def kill(self): ...
+
 
 def split_tasks(tasklist: list, n: int) -> list:
     """
@@ -38,8 +36,9 @@ def split_tasks(tasklist: list, n: int) -> list:
     """
     if not tasklist or n <= 0:
         return []
-    split_task = [tasklist[i:i + n] for i in range(0, len(tasklist), n)]
+    split_task = [tasklist[i : i + n] for i in range(0, len(tasklist), n)]
     return split_task
+
 
 def split_joblist(joblist: str) -> list:
     """
@@ -48,10 +47,10 @@ def split_joblist(joblist: str) -> list:
     """
     if not joblist:
         return []
-    
+
     # Replace commas with spaces and split by whitespace
     return [list(g) for k, g in groupby(joblist, key=lambda x: len(x) > 0) if k]
- 
+
 
 def parse_job_info(job_info: str) -> dict:
     """
@@ -65,7 +64,7 @@ def parse_job_info(job_info: str) -> dict:
         "cores": None,
         "node": None,
         "workdir": None,
-        "start": None
+        "start": None,
     }
 
     if len(job_info) > 0:
@@ -101,7 +100,8 @@ def parse_job_info(job_info: str) -> dict:
                 continue
     return job_dict
 
-def check_jobs(jobname:str=None, jobid:int=None, user:str=None):
+
+def check_jobs(jobname: str = None, jobid: int = None, user: str = None):
     """
     Monitor the status of active jobs in the PBS queue.
     """
@@ -115,7 +115,8 @@ def check_jobs(jobname:str=None, jobid:int=None, user:str=None):
     except subprocess.CalledProcessError as e:
         print("Error checking jobs:", e)
         return 0
-    
+
+
 def list_all_jobs():
     """
     List all active jobs in the PBS queue.
@@ -142,7 +143,8 @@ def list_all_jobs():
     except subprocess.CalledProcessError as e:
         print("Error listing jobs:", e)
         return []
-    
+
+
 def output_jobs():
     out = list_all_jobs()
     if len(out) == 0:
@@ -155,6 +157,7 @@ def output_jobs():
     format_print(values, headers)
     return
 
+
 def monitor_jobs(jobname: str, interval: int = 300):
     """
     Monitor the status of a specific job in the PBS queue.
@@ -163,6 +166,7 @@ def monitor_jobs(jobname: str, interval: int = 300):
         print("Job name is required for monitoring.")
         return
     from collections import Counter
+
     run_next = False
     while not run_next:
         counter = Counter()
@@ -177,17 +181,17 @@ def monitor_jobs(jobname: str, interval: int = 300):
             print(f"Current job status: {counter}")
             time.sleep(interval)
     print("All jobs completed. Proceeding to the next step.")
-    
+
+
 def submit_job_template(template: str, restart: int = 3):
     """
     Submit a job using a template file.
     """
     for attempt in range(restart):
         try:
-            result = subprocess.run(["qsub", template],
-                                    check=True,
-                                    capture_output=True,
-                                    text=True)
+            result = subprocess.run(
+                ["qsub", template], check=True, capture_output=True, text=True
+            )
             print(f"Job submitted using template: {template}", result.stdout)
             break  # Exit after successful submission
         except subprocess.CalledProcessError as e:
@@ -196,21 +200,30 @@ def submit_job_template(template: str, restart: int = 3):
             print("Output:", e.output)
             print("Error message:", e.stderr)
             if attempt < restart:
-                print(f"Retrying job submission after 10 minutes...")
+                print("Retrying job submission after 10 minutes...")
                 time.sleep(600)  # Wait for 10 minutes before retrying
             else:
                 raise RuntimeError(f"Failed to submit job after {restart} attempts.")
+
 
 def shorten_path(path: str):
     home = os.path.expanduser("~")
     short_path = path.replace(home, "~")
     return short_path
 
+
 def format_print(jobinfo: list, headers: list):
-    col_widths = [max(len(str(row[i])) for row in jobinfo) for i in range(len(jobinfo[0]))]
-    print("\033[44m" + "  ".join(str(val).center(col_widths[i]) for i, val in enumerate(headers)) + "\033[0m")
+    col_widths = [
+        max(len(str(row[i])) for row in jobinfo) for i in range(len(jobinfo[0]))
+    ]
+    print(
+        "\033[44m"
+        + "  ".join(str(val).center(col_widths[i]) for i, val in enumerate(headers))
+        + "\033[0m"
+    )
     for row in jobinfo:
         print("    ".join(str(val).center(col_widths[i]) for i, val in enumerate(row)))
+
 
 def batch_sub(num=1):
     """
@@ -218,7 +231,7 @@ def batch_sub(num=1):
     This function can be extended to include command-line arguments or other functionalities.
     """
     print("Dispatch module is running...")
-    
+
     # NSCC can run 99 tasks at the same time
     all_list = split_tasks(list(range(num, 5000)), 90)
     list_value = [[l[0], l[-1]] for l in all_list]
@@ -228,13 +241,14 @@ def batch_sub(num=1):
             monitor_jobs("CuSCOH", interval=600)
             submit_job_template("sub_vasp.pbs")
             continue
-        os.system(f"sed -i \"8s/{list_value[i-1][0]}/{l[0]}/g\" sub_vasp.pbs")
-        os.system(f"sed -i \"8s/{list_value[i-1][1]}/{l[1]}/g\" sub_vasp.pbs")
+        os.system(f'sed -i "8s/{list_value[i-1][0]}/{l[0]}/g" sub_vasp.pbs')
+        os.system(f'sed -i "8s/{list_value[i-1][1]}/{l[1]}/g" sub_vasp.pbs')
 
         # Monitor the job status
         monitor_jobs("CuSCOH", interval=600)
         submit_job_template("sub_vasp.pbs")
     print("All tasks finished.")
+
 
 def main():
     if len(sys.argv) == 1:
@@ -248,5 +262,6 @@ def main():
             num = int(sys.argv[2])
             batch_sub(num)
 
-if __name__ == '__main__':
-   main() 
+
+if __name__ == "__main__":
+    main()

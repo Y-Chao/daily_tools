@@ -3,15 +3,16 @@
 #PBS -N gpu_node_tunnel
 #PBS -l select=1:ngpus=1
 #PBS -l walltime=02:00:00
-#PBS -j oe  
-#PBS -m bea
-#PBS -M c_yang@nus.edu.sg
+#PBS -j oe
 #PBS -P 11004282
-# `-m bea` send mail when the job (b)egins, (e)nds, or (a)borts
+
 # `-j oe`: join STDOUT and STDERR in single file
 
 source ~/.bashrc
+module load miniforge3
+conda activate [env] # replace [env] with your conda environment name
 cd $PBS_O_WORKDIR
+cp ~/opt/code .
 RUNTIME_NAME="nscc_gpu"
 OUTPUT_PATH="${PBS_O_WORKDIR}/${RUNTIME_NAME}_tunnel.out"
 python ~/opt/src/tools/launch_tunnel.py --type $RUNTIME_NAME > $OUTPUT_PATH 2>&1

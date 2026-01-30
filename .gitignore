@@ -6,7 +6,11 @@
 
 # develop environment
 dev/
+<<<<<<< Updated upstream
 .deprecated/
 .qodo/
 .venv/
+=======
+.deprecated
+>>>>>>> Stashed changes
 .python-version

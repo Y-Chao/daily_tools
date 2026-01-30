@@ -31,6 +31,13 @@ def random_orthogonal_matrix(dim: int = 3) -> np.ndarray:
     Q, R = np.linalg.qr(A)
     return Q
 
+<<<<<<< Updated upstream
 
+=======
+
+def main(): ...
+
+
+>>>>>>> Stashed changes
 if __name__ == "__main__":
     main()
